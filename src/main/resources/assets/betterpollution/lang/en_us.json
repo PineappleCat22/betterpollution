@@ -1,0 +1,13 @@
+{
+  "itemGroup.betterpollution": "Example Mod Tab",
+  "block.betterpollution.example_block": "Example Block",
+  "item.betterpollution.example_item": "Example Item",
+
+  "betterpollution.configuration.title": "BetterPollution Configs",
+  "betterpollution.configuration.section.betterpollution.common.toml": "BetterPollution Configs",
+  "betterpollution.configuration.section.betterpollution.common.toml.title": "BetterPollution Configs",
+  "betterpollution.configuration.items": "Item List",
+  "betterpollution.configuration.logDirtBlock": "Log Dirt Block",
+  "betterpollution.configuration.magicNumberIntroduction": "Magic Number Text",
+  "betterpollution.configuration.magicNumber": "Magic Number"
+}
