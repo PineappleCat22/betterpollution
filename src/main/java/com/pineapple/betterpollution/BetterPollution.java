@@ -49,12 +49,12 @@ public class BetterPollution {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    //can i put this here is this okay
+    //temp placement: this should maybe go somewhere else
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, BetterPollution.MODID);
 
-    public static final Supplier<AttachmentType<Integer>> POLLUTION_DATA = ATTACHMENT_TYPES.register(
+    public static final Supplier<AttachmentType<int[]>> POLLUTION_DATA = ATTACHMENT_TYPES.register(
             "pollution_value",
-            () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+            () -> AttachmentType.builder(() -> new int[32]).build()
     );
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.

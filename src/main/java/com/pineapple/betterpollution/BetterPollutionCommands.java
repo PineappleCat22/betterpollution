@@ -4,9 +4,17 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.neoforged.fml.common.Mod;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.world.level.chunk.DataLayer;
+import net.neoforged.neoforge.attachment.AttachmentType;
+
+import java.util.Arrays;
 
 @Mod(BetterPollution.MODID)
 public class BetterPollutionCommands {
@@ -41,13 +49,11 @@ public class BetterPollutionCommands {
     }
 
     private static int getChunk(CommandContext<CommandSourceStack> context) {
-        context.getSource().sendSuccess(() -> Component.literal(
-                String.valueOf(Math.floor(context.getSource().getPlayer().getX()/16))
-                        + " "
-                        + String.valueOf(Math.floor(context.getSource().getPlayer().getY()/16))
-                        + " "
-                        + String.valueOf(Math.floor(context.getSource().getPlayer().getZ()/16))
-        ), false);
-        return 2;
+        ServerPlayer player = context.getSource().getPlayer();
+        Level level = player.level(); //shhh no this wont return a NPE dont worry about it
+        LevelChunk playerChunk = level.getChunkAt(player.blockPosition());
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(playerChunk.getData(BetterPollution.POLLUTION_DATA))), false);
+        context.getSource().sendSuccess(() -> Component.literal(player.chunkPosition().toString()), false);
+        return 0; //uhhhhhh
     }
 }
