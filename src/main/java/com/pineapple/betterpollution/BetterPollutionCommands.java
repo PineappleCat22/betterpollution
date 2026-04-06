@@ -4,17 +4,13 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.neoforged.fml.common.Mod;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.world.level.chunk.DataLayer;
-import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.Arrays;
+
+import static com.pineapple.betterpollution.BetterPollutionCommon.getPollutionAtPlayer;
 
 @Mod(BetterPollution.MODID)
 public class BetterPollutionCommands {
@@ -32,8 +28,8 @@ public class BetterPollutionCommands {
                 )
         );
         dispatcher.register((Commands.literal(BetterPollution.MODID)
-                .then(Commands.literal("getChunk")
-                        .executes(BetterPollutionCommands::getChunk)
+                .then(Commands.literal("getPollution")
+                        .executes(BetterPollutionCommands::getPollution)
                 )
         ));
         BetterPollution.LOGGER.debug("BetterPollution commands registered!"); //...probably.
@@ -48,12 +44,9 @@ public class BetterPollutionCommands {
         return number;
     }
 
-    private static int getChunk(CommandContext<CommandSourceStack> context) {
-        ServerPlayer player = context.getSource().getPlayer();
-        Level level = player.level(); //shhh no this wont return a NPE dont worry about it
-        LevelChunk playerChunk = level.getChunkAt(player.blockPosition());
-        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(playerChunk.getData(BetterPollution.POLLUTION_DATA))), false);
-        context.getSource().sendSuccess(() -> Component.literal(player.chunkPosition().toString()), false);
+    private static int getPollution(CommandContext<CommandSourceStack> context) {
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(getPollutionAtPlayer(context.getSource().getPlayer()))), false);
+        context.getSource().getLevel();
         return 0; //uhhhhhh
     }
 }
