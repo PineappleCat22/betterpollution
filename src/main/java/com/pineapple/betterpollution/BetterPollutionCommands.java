@@ -1,16 +1,26 @@
 package com.pineapple.betterpollution;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.common.Mod;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 import java.util.Arrays;
+
+/*
+TODO: section number + 4.....
+TODO: INPUT VALIDATION! index # shouldnt be below 4 unless below bedrock. discard input if index is > 0
+TODO: make commands more responsive ie: if command fails, the command should respond with why.
+if you pass a negative to my methods, i will kill you.
+ */
 
 @Mod(BetterPollution.MODID)
 public class BetterPollutionCommands {
@@ -25,8 +35,22 @@ public class BetterPollutionCommands {
                         .then(Commands.argument("pos", BlockPosArgument.blockPos())
                                 .executes(ctx -> BetterPollutionCommands.getPollutionWithPos(ctx, BlockPosArgument.getBlockPos(ctx, "pos"))
                         )
+                ))
+                .then(Commands.literal("getSectionY")
+                        .executes(ctx -> getSection(ctx))
                 )
-        )));
+                // this is all KINDS of messed up
+                .then(Commands.literal("setPollution")
+                        .then(Commands.argument("value", IntegerArgumentType.integer())
+                                .executes(ctx -> setPollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
+                        )
+                        .then(Commands.argument("index", IntegerArgumentType.integer()))
+                        .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                .executes(ctx -> BetterPollutionCommands.setPollutionWithPos(ctx, BlockPosArgument.getBlockPos(ctx, "pos"), IntegerArgumentType.getInteger(ctx, "index"), IntegerArgumentType.getInteger(ctx, "value"))))
+                )
+
+
+        ));
         BetterPollution.LOGGER.debug("BetterPollution commands registered!"); //...probably.
     }
 
@@ -41,6 +65,26 @@ public class BetterPollutionCommands {
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(
                 BetterPollutionCommon.getPollutionAtPos(blockPos, context.getSource().getLevel())
                 )), false);
+        return 0;
+    }
+
+    private static int setPollution(CommandContext<CommandSourceStack> context, int value) {
+        ServerPlayer player = context.getSource().getPlayer();
+        BetterPollutionCommon.setPollutionAtPlayer(player, value);
+        BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer());
+        return 0;
+    }
+
+    private static int setPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int index, int value) {
+        ServerLevel level = context.getSource().getLevel();
+        BetterPollutionCommon.setPollutionAtPos(blockPos, level,index, value);
+        BetterPollutionCommon.getPollutionAtPos(blockPos, level);
+        return 0;
+    }
+
+    private static int getSection(CommandContext<CommandSourceStack> context) {
+        int section = context.getSource().getPlayer().getBlockY() >> 4;
+        context.getSource().sendSuccess(() -> Component.literal(String.valueOf(section + 4)), false);
         return 0;
     }
 }
