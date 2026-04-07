@@ -1,6 +1,6 @@
 # BetterPollution
 
-I was tired of certain other pollution mods being closed source, having a very old-fashioned design, giving me 1,000,000 potion effects, giving nearby mods strength three and regeneration, and not focusing on the actual effects pollution has on the environment.
+I was tired of certain other pollution mods being closed source, having a very old-fashioned design, giving me 1,000,000 potion effects, giving nearby mobs strength 3 and regeneration, and not focusing on the actual effects pollution has on the environment.
 
 and Destroy isn't on 1.21.1 yet.
 
