@@ -16,8 +16,7 @@ import net.minecraft.commands.Commands;
 import java.util.Arrays;
 
 /*
-TODO: section number + 4.....
-TODO: INPUT VALIDATION! index # shouldnt be below 4 unless below bedrock. discard input if index is > 0
+TODO: derive section # from blockPos instead of specifying
 TODO: make commands more responsive ie: if command fails, the command should respond with why.
 if you pass a negative to my methods, i will kill you.
  */
@@ -43,13 +42,18 @@ public class BetterPollutionCommands {
                 .then(Commands.literal("setPollution")
                         .then(Commands.argument("value", IntegerArgumentType.integer())
                                 .executes(ctx -> setPollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
+                                .then(Commands.argument("index", IntegerArgumentType.integer())
+                                        .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                                .executes(ctx -> BetterPollutionCommands.setPollutionWithPos(
+                                                        ctx,
+                                                        BlockPosArgument.getBlockPos(ctx, "pos"),
+                                                        IntegerArgumentType.getInteger(ctx, "index"),
+                                                        IntegerArgumentType.getInteger(ctx, "value"))
+                                                )
+                                        )
+                                )
                         )
-                        .then(Commands.argument("index", IntegerArgumentType.integer()))
-                        .then(Commands.argument("pos", BlockPosArgument.blockPos())
-                                .executes(ctx -> BetterPollutionCommands.setPollutionWithPos(ctx, BlockPosArgument.getBlockPos(ctx, "pos"), IntegerArgumentType.getInteger(ctx, "index"), IntegerArgumentType.getInteger(ctx, "value"))))
                 )
-
-
         ));
         BetterPollution.LOGGER.debug("BetterPollution commands registered!"); //...probably.
     }
@@ -63,7 +67,7 @@ public class BetterPollutionCommands {
 
     private static int getPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos) {
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(
-                BetterPollutionCommon.getPollutionAtPos(blockPos, context.getSource().getLevel())
+                    BetterPollutionCommon.getPollutionAtPos(blockPos, context.getSource().getLevel())
                 )), false);
         return 0;
     }
@@ -71,14 +75,15 @@ public class BetterPollutionCommands {
     private static int setPollution(CommandContext<CommandSourceStack> context, int value) {
         ServerPlayer player = context.getSource().getPlayer();
         BetterPollutionCommon.setPollutionAtPlayer(player, value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer()))), false);
         BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer());
         return 0;
     }
 
     private static int setPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int index, int value) {
         ServerLevel level = context.getSource().getLevel();
-        BetterPollutionCommon.setPollutionAtPos(blockPos, level,index, value);
-        BetterPollutionCommon.getPollutionAtPos(blockPos, level);
+        BetterPollutionCommon.setPollutionAtPos(blockPos, level, index, value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level))), false);
         return 0;
     }
 
