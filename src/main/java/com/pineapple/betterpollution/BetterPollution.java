@@ -9,18 +9,8 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -31,9 +21,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
-
-import com.pineapple.betterpollution.TestClassPleaseDelete;
 
 /*
 * TODO: clean up this file.
@@ -52,9 +41,15 @@ public class BetterPollution {
     //temp placement: this should maybe go somewhere else
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, BetterPollution.MODID);
 
+    //todo: figure out how this actually works
     public static final Supplier<AttachmentType<int[]>> POLLUTION_DATA = ATTACHMENT_TYPES.register(
-            "pollution_value",
-            () -> AttachmentType.builder(() -> new int[32]).build()
+            "pollution_data",
+            () -> AttachmentType.builder(() -> new int[32])
+                    .serialize(Codec.INT.listOf().xmap(
+                            list -> list.stream().mapToInt(i -> i).toArray(), // From List to int[]
+                            array -> Arrays.stream(array).boxed().toList()    // From int[] to List
+                    ))
+                    .build()
     );
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
