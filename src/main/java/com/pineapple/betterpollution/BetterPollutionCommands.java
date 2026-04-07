@@ -23,11 +23,7 @@ if you pass a negative to my methods, i will kill you.
 
 @Mod(BetterPollution.MODID)
 public class BetterPollutionCommands {
-    //bonus, do commands run on the client side or server side?
-    //server side it seems
-
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        // Build the command structure using Commands.literal and Commands.argument
         dispatcher.register((Commands.literal(BetterPollution.MODID)
                 .then(Commands.literal("getPollution")
                         .executes(ctx -> BetterPollutionCommands.getPollution(ctx))
@@ -42,19 +38,17 @@ public class BetterPollutionCommands {
                 .then(Commands.literal("setPollution")
                         .then(Commands.argument("value", IntegerArgumentType.integer())
                                 .executes(ctx -> setPollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
-                                .then(Commands.argument("index", IntegerArgumentType.integer())
                                         .then(Commands.argument("pos", BlockPosArgument.blockPos())
                                                 .executes(ctx -> BetterPollutionCommands.setPollutionWithPos(
                                                         ctx,
                                                         BlockPosArgument.getBlockPos(ctx, "pos"),
-                                                        IntegerArgumentType.getInteger(ctx, "index"),
                                                         IntegerArgumentType.getInteger(ctx, "value"))
                                                 )
                                         )
                                 )
                         )
                 )
-        ));
+        );
         BetterPollution.LOGGER.debug("BetterPollution commands registered!"); //...probably.
     }
 
@@ -80,9 +74,9 @@ public class BetterPollutionCommands {
         return 0;
     }
 
-    private static int setPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int index, int value) {
+    private static int setPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int value) {
         ServerLevel level = context.getSource().getLevel();
-        BetterPollutionCommon.setPollutionAtPos(blockPos, level, index, value);
+        BetterPollutionCommon.setPollutionAtPos(blockPos, level, value);
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level))), false);
         return 0;
     }

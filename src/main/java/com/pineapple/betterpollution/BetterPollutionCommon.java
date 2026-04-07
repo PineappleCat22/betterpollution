@@ -20,7 +20,7 @@ public class BetterPollutionCommon {
         LevelChunk playerChunk = level.getChunkAt(player.blockPosition());
         int playerSection = (player.getBlockY() >> 4) + 4;
         if (playerSection < 0) {
-            BetterPollution.LOGGER.warn("BETTERPOLLUTION: PlayerSection resolved below 0! Player is below bedrock. Aborting.");
+            BetterPollution.LOGGER.warn("playerSection resolved below 0! Player is below bedrock. Aborting.");
             return;
         }
         int[] data = playerChunk.getData(BetterPollution.POLLUTION_DATA);
@@ -34,14 +34,15 @@ public class BetterPollutionCommon {
         return posChunk.getData(BetterPollution.POLLUTION_DATA);
     }
 
-    public static void setPollutionAtPos(BlockPos blockPos, ServerLevel level, int index, int value) {
-        if (index < 0) {
-            BetterPollution.LOGGER.warn("BETTERPOLLUTION: Passed index less than zero to setPollutionAtPos! Aborting.");
+    public static void setPollutionAtPos(BlockPos blockPos, ServerLevel level, int value) {
+        LevelChunk posChunk = level.getChunkAt(blockPos);
+        int posSection = (blockPos.getY() >> 4) + 4;
+        if (posSection < 0) {
+            BetterPollution.LOGGER.warn("posSection resolved below 0! Position is below bedrock. Aborting.");
             return;
         }
-        LevelChunk posChunk = level.getChunkAt(blockPos);
         int[] data = posChunk.getData(BetterPollution.POLLUTION_DATA);
-        data[index] = value;
+        data[posSection] = value;
         posChunk.setData(BetterPollution.POLLUTION_DATA, data);
     }
 }
