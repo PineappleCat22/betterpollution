@@ -3,6 +3,7 @@ package com.pineapple.betterpollution;
 import com.mojang.serialization.Codec;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.*;
 import org.slf4j.Logger;
 
@@ -51,6 +52,8 @@ public class BetterPollution {
                     ))
                     .build()
     );
+
+
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
@@ -112,4 +115,10 @@ public class BetterPollution {
         // Call a method to register your command
         BetterPollutionCommands.register(event.getDispatcher());
     }
+
+    /*
+    @SubscribeEvent
+    public void onSmelt(PlayerEvent.ItemSmeltedEvent event) {
+        LOGGER.info("smelted a " + event.getSmelting());
+    }*/ // very first method for handling smelting (sad!)
 }

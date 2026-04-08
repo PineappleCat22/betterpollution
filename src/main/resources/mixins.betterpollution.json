@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.pineapple.betterpollution.smelthandlermixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "SmeltHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
