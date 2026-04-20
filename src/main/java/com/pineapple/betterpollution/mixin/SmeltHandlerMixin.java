@@ -31,4 +31,3 @@ public class SmeltHandlerMixin {
     }
 }
 // TODO: GET ACCESS TRANSFORMER WORKING!!!
-// TODO: HOUSEKEEPING: MOVE neoforge.mods.toml OUT OF /templates
