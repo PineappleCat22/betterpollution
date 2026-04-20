@@ -24,7 +24,7 @@ public class SmeltHandlerMixin {
 
         // Slot 2 = output
         ItemStack output = blockEntity.getItem(2);
-        if (false) { //blockEntity.isLit()
+        if (blockEntity.isLit()) { //blockEntity.isLit()
             BetterPollution.LOGGER.info("hi! im a furnace");
             BetterPollution.LOGGER.info(output.toString());
         }
