@@ -1,8 +1,10 @@
 package com.pineapple.betterpollution.mixin;
 
+import com.pineapple.betterpollution.BetterPollutionCommon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
@@ -22,12 +24,17 @@ public class SmeltHandlerMixin {
     @Inject(method = "serverTick", at = @At("TAIL"), remap = false)
     private static void onSmeltComplete(Level level, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci) {
 
-        // Slot 2 = output
+        ServerLevel serverLevel = null;
+        if (!level.isClientSide()) { //make sure this runs on the server
+            serverLevel = (ServerLevel) level;
+        }
+        else {
+            return;
+        }
+
         ItemStack output = blockEntity.getItem(2);
         if (blockEntity.isLit()) { //blockEntity.isLit()
-            BetterPollution.LOGGER.info("hi! im a furnace");
-            BetterPollution.LOGGER.info(output.toString());
+            BetterPollutionCommon.setPollutionAtPos(pos, serverLevel, 3);
         }
     }
 }
-// TODO: GET ACCESS TRANSFORMER WORKING!!!

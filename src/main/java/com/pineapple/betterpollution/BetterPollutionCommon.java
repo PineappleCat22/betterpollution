@@ -45,4 +45,10 @@ public class BetterPollutionCommon {
         data[posSection] = value;
         posChunk.setData(BetterPollution.POLLUTION_DATA, data);
     }
+
+    // TODO: add/del pollution instead of set
+    /* ideas
+        get the pollution at pos, add a number to it, and set it. problem: getpollution returns an array. y-index will need to be derived.
+     */
+
 }
