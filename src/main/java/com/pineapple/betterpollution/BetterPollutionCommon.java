@@ -9,26 +9,6 @@ import net.neoforged.fml.common.Mod;
 @Mod(BetterPollution.MODID)
 public class BetterPollutionCommon {
 
-    public static int[] getPollutionAtPlayer(ServerPlayer player) {
-        ServerLevel level = player.serverLevel();
-        LevelChunk playerChunk = level.getChunkAt(player.blockPosition());
-        return playerChunk.getData(BetterPollution.POLLUTION_DATA);
-    }
-
-    public static void setPollutionAtPlayer(ServerPlayer player, int value) {
-        ServerLevel level = player.serverLevel();
-        LevelChunk playerChunk = level.getChunkAt(player.blockPosition());
-        int playerSection = (player.getBlockY() >> 4) + 4;
-        if (playerSection < 0) {
-            BetterPollution.LOGGER.warn("playerSection resolved below 0! Player is below bedrock. Aborting.");
-            return;
-        }
-        int[] data = playerChunk.getData(BetterPollution.POLLUTION_DATA);
-        data[playerSection] = value;
-        playerChunk.setData(BetterPollution.POLLUTION_DATA, data);
-        // maybe return success status?
-    }
-
     public static int[] getPollutionAtPos(BlockPos blockPos, ServerLevel level) {
         LevelChunk posChunk = level.getChunkAt(blockPos);
         return posChunk.getData(BetterPollution.POLLUTION_DATA);
@@ -46,9 +26,12 @@ public class BetterPollutionCommon {
         posChunk.setData(BetterPollution.POLLUTION_DATA, data);
     }
 
-    // TODO: add/del pollution instead of set
-    /* ideas
-        get the pollution at pos, add a number to it, and set it. problem: getpollution returns an array. y-index will need to be derived.
-     */
+    public static void addPollutionAtPos() {
+
+    }
+
+    public static void remPollutionAtPos() {
+
+    }
 
 }

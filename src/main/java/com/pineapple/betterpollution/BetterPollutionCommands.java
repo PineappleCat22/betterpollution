@@ -54,7 +54,7 @@ public class BetterPollutionCommands {
 
     private static int getPollution(CommandContext<CommandSourceStack> context) {
         context.getSource().sendSuccess(() -> Component.literal(
-                Arrays.toString(BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer()))
+                Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel()))
         ), false);
         return 0; //uhhhhhh
     }
@@ -68,9 +68,8 @@ public class BetterPollutionCommands {
 
     private static int setPollution(CommandContext<CommandSourceStack> context, int value) {
         ServerPlayer player = context.getSource().getPlayer();
-        BetterPollutionCommon.setPollutionAtPlayer(player, value);
-        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer()))), false);
-        BetterPollutionCommon.getPollutionAtPlayer(context.getSource().getPlayer());
+        BetterPollutionCommon.setPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel()))), false);
         return 0;
     }
 
@@ -87,3 +86,5 @@ public class BetterPollutionCommands {
         return 0;
     }
 }
+
+//TODO: code clean up
