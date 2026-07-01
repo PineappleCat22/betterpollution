@@ -34,7 +34,7 @@ public class SmeltHandlerMixin {
 
         ItemStack output = blockEntity.getItem(2);
         if (blockEntity.isLit()) { //blockEntity.isLit()
-            BetterPollutionCommon.setPollutionAtPos(pos, serverLevel, 3);
+            BetterPollutionCommon.addPollutionAtPos(pos, serverLevel, 3);
         }
     }
 }

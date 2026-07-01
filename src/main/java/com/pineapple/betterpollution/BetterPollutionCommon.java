@@ -27,16 +27,33 @@ public class BetterPollutionCommon {
     }
 
     public static void addPollutionAtPos(BlockPos blockPos, ServerLevel level, int value) {
-        int[] oldData = getPollutionAtPos(blockPos, level);
+        LevelChunk posChunk = level.getChunkAt(blockPos);
         int posSection = (blockPos.getY() >> 4) + 4;
         if (posSection < 0) {
             BetterPollution.LOGGER.warn("posSection resolved below 0! Position is below bedrock. Aborting.");
             return;
         }
+        if (value == 0) {
+            return;
+        }
+        int[] pollutionArray = getPollutionAtPos(blockPos, level);
+        pollutionArray[posSection] = pollutionArray[posSection] + value;
+        posChunk.setData(BetterPollution.POLLUTION_DATA, pollutionArray);
     }
     
     public static void remPollutionAtPos(BlockPos blockPos, ServerLevel level, int value) {
-
+        LevelChunk posChunk = level.getChunkAt(blockPos);
+        int posSection = (blockPos.getY() >> 4) + 4;
+        if (posSection < 0) {
+            BetterPollution.LOGGER.warn("posSection resolved below 0! Position is below bedrock. Aborting.");
+            return;
+        }
+        if (value == 0) {
+            return;
+        }
+        int[] pollutionArray = getPollutionAtPos(blockPos, level);
+        pollutionArray[posSection] = pollutionArray[posSection] - value;
+        posChunk.setData(BetterPollution.POLLUTION_DATA, pollutionArray);
     }
 
 }
