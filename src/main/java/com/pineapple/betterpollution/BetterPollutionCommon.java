@@ -26,11 +26,16 @@ public class BetterPollutionCommon {
         posChunk.setData(BetterPollution.POLLUTION_DATA, data);
     }
 
-    public static void addPollutionAtPos() {
-
+    public static void addPollutionAtPos(BlockPos blockPos, ServerLevel level, int value) {
+        int[] oldData = getPollutionAtPos(blockPos, level);
+        int posSection = (blockPos.getY() >> 4) + 4;
+        if (posSection < 0) {
+            BetterPollution.LOGGER.warn("posSection resolved below 0! Position is below bedrock. Aborting.");
+            return;
+        }
     }
-
-    public static void remPollutionAtPos() {
+    
+    public static void remPollutionAtPos(BlockPos blockPos, ServerLevel level, int value) {
 
     }
 

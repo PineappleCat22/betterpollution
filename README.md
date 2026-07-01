@@ -8,8 +8,13 @@ so I made my own.
 
 # roadmap
 - [x] figure out how to map values to chunk coordinates (x,y,z)
-- [ ] generate pollutants via recipe
+- [ ] generate pollutants via recipe???
+- [ ] heavy pollution vs light pollution
 - [ ] effects of pollution
-  - [ ] research the effects of pollution
+	- [ ] research the effects of pollution
+	- [ ] exposure
+	- [ ] ecosystem deterioration and death
+	- [ ] fauna deterioration and death
+	- [ ] player deterioration and death
 - [ ] cubic chunk vertical connection system
 - [ ] hijack PoTR and make it use my better system
