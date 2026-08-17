@@ -62,7 +62,15 @@ public class BetterPollutionMain {
                     .build()
     );
 
-
+    public static final Supplier<AttachmentType<int[]>> HEAVY_POLLUTION_DATA = ATTACHMENT_TYPES.register(
+            "heavy_pollution_data",
+            () -> AttachmentType.builder(() -> new int[32])
+                    .serialize(Codec.INT.listOf().xmap(
+                            list -> list.stream().mapToInt(i -> i).toArray(), // From List to int[]
+                            array -> Arrays.stream(array).boxed().toList()    // From int[] to List
+                    ))
+                    .build()
+    );
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
@@ -162,6 +170,6 @@ public class BetterPollutionMain {
         // slower crop growth at severe levels of pollution? todo: research pollution effect on agri
         // if possible chunk based changes should be executed if the chunk is loaded, to avoid lag???
         // the pollutiondata number should be interpreted as POLLUTIONDATA/1000 = ug/m^3 pm2.5 so we have three decimals to work with
-        // also assuming (for the furnace) that 1 ppm co2 = 1 ug/m^3 pm2.5 but it varies
+        // also assuming (for the furnace) that 1 ppm co2 = 1 microgram/m^3 pm2.5 but it varies
     }
 }
