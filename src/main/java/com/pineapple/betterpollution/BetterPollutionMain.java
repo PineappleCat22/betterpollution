@@ -161,5 +161,7 @@ public class BetterPollutionMain {
         // how hard is it to change the water pallette?
         // slower crop growth at severe levels of pollution? todo: research pollution effect on agri
         // if possible chunk based changes should be executed if the chunk is loaded, to avoid lag???
+        // the pollutiondata number should be interpreted as POLLUTIONDATA/1000 = ug/m^3 pm2.5 so we have three decimals to work with
+        // also assuming (for the furnace) that 1 ppm co2 = 1 ug/m^3 pm2.5 but it varies
     }
 }

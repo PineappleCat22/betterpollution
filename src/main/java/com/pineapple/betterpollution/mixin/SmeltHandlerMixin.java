@@ -29,7 +29,10 @@ public class SmeltHandlerMixin {
 
         ItemStack output = blockEntity.getItem(2);
         if (blockEntity.isLit()) { //blockEntity.isLit()
-            BetterPollutionCommon.addPollutionAtPos(pos, serverLevel, 3);
+            BetterPollutionCommon.addPollutionAtPos(pos, serverLevel, 1);
+            // eqv. to adding 0.001 ug/m^3 pm2.5
+            // this assumes that the fuel is 1kg of wood expended over 1600 ticks
+            // source: https://ustravelersleague.com/how-much-pollution-does-a-campfire.html
         }
     }
 }

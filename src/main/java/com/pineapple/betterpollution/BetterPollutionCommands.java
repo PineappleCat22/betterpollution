@@ -15,7 +15,6 @@ import net.minecraft.commands.Commands;
 import java.util.Arrays;
 
 /*
-TODO: derive section # from blockPos instead of specifying
 TODO: make commands more responsive ie: if command fails, the command should respond with why.
 if you pass a negative to my methods, i will kill you.
  */
