@@ -1,7 +1,6 @@
 package com.pineapple.betterpollution;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
@@ -21,20 +20,23 @@ TODO: make commands more responsive ie: if command fails, the command should res
 if you pass a negative to my methods, i will kill you.
  */
 
-@Mod(BetterPollution.MODID)
+@Mod(BetterPollutionMain.MODID)
 public class BetterPollutionCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        dispatcher.register((Commands.literal(BetterPollution.MODID)
+        dispatcher.register((Commands.literal(BetterPollutionMain.MODID)
                 .then(Commands.literal("getPollution")
                         .executes(ctx -> BetterPollutionCommands.getPollution(ctx))
                         .then(Commands.argument("pos", BlockPosArgument.blockPos())
-                                .executes(ctx -> BetterPollutionCommands.getPollutionWithPos(ctx, BlockPosArgument.getBlockPos(ctx, "pos"))
+                                .executes(ctx -> BetterPollutionCommands.getPollutionWithPos(
+                                        ctx,
+                                        BlockPosArgument.getBlockPos(ctx, "pos"))
+                                )
                         )
-                ))
+                )
                 .then(Commands.literal("getSectionY")
                         .executes(ctx -> getSection(ctx))
                 )
-                // this is all KINDS of messed up
+                // this structure is a little questionable
                 .then(Commands.literal("setPollution")
                         .then(Commands.argument("value", IntegerArgumentType.integer())
                                 .executes(ctx -> setPollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
@@ -45,11 +47,34 @@ public class BetterPollutionCommands {
                                                         IntegerArgumentType.getInteger(ctx, "value"))
                                                 )
                                         )
+                        )
+                )
+                .then(Commands.literal("addPollution")
+                        .then(Commands.argument("value", IntegerArgumentType.integer())
+                                .executes(ctx -> addPollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .executes(ctx -> BetterPollutionCommands.addPollutionWithPos(
+                                                ctx,
+                                                BlockPosArgument.getBlockPos(ctx, "pos"),
+                                                IntegerArgumentType.getInteger(ctx, "value"))
+                                        )
                                 )
                         )
                 )
-        );
-        BetterPollution.LOGGER.debug("BetterPollution commands registered!"); //...probably.
+                .then(Commands.literal("removePollution")
+                        .then(Commands.argument("value", IntegerArgumentType.integer())
+                                .executes(ctx -> removePollution(ctx, IntegerArgumentType.getInteger(ctx, "value")))
+                                .then(Commands.argument("pos", BlockPosArgument.blockPos())
+                                        .executes(ctx -> BetterPollutionCommands.removePollutionWithPos(
+                                                ctx,
+                                                BlockPosArgument.getBlockPos(ctx, "pos"),
+                                                IntegerArgumentType.getInteger(ctx, "value"))
+                                        )
+                                )
+                        )
+                )
+        ));
+        BetterPollutionMain.LOGGER.debug("BetterPollution commands registered!"); //...probably.
     }
 
     private static int getPollution(CommandContext<CommandSourceStack> context) {
@@ -85,6 +110,34 @@ public class BetterPollutionCommands {
         context.getSource().sendSuccess(() -> Component.literal(String.valueOf(section + 4)), false);
         return 0;
     }
+
+    private static int addPollution(CommandContext<CommandSourceStack> context, int value) {
+        ServerPlayer player = context.getSource().getPlayer();
+        BetterPollutionCommon.addPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel()))), false);
+        return 0;
+    }
+
+    private static int addPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int value) {
+        ServerLevel level = context.getSource().getLevel();
+        BetterPollutionCommon.addPollutionAtPos(blockPos, level, value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level))), false);
+        return 0;
+    }
+
+    private static int removePollution(CommandContext<CommandSourceStack> context, int value) {
+        ServerPlayer player = context.getSource().getPlayer();
+        BetterPollutionCommon.remPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel()))), false);
+        return 0;
+    }
+
+    private static int removePollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int value) {
+        ServerLevel level = context.getSource().getLevel();
+        BetterPollutionCommon.remPollutionAtPos(blockPos, level, value);
+        context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level))), false);
+        return 0;
+    }
 }
 
-//TODO: code clean up
+
