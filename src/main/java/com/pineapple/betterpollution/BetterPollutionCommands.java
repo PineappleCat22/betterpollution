@@ -181,7 +181,7 @@ public class BetterPollutionCommands {
 
     private static int addPollution(CommandContext<CommandSourceStack> context, int value, boolean heavy) {
         ServerPlayer player = context.getSource().getPlayer();
-        BetterPollutionCommon.addPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value);
+        BetterPollutionCommon.addPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value, heavy);
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel(), heavy))), false);
         return 0;
     }
@@ -192,7 +192,7 @@ public class BetterPollutionCommands {
 
     private static int addPollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int value, boolean heavy) {
         ServerLevel level = context.getSource().getLevel();
-        BetterPollutionCommon.addPollutionAtPos(blockPos, level, value);
+        BetterPollutionCommon.addPollutionAtPos(blockPos, level, value, heavy);
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level, heavy))), false);
         return 0;
     }
@@ -203,7 +203,7 @@ public class BetterPollutionCommands {
 
     private static int removePollution(CommandContext<CommandSourceStack> context, int value, boolean heavy) {
         ServerPlayer player = context.getSource().getPlayer();
-        BetterPollutionCommon.remPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value);
+        BetterPollutionCommon.remPollutionAtPos(player.getOnPos(), context.getSource().getLevel(), value, heavy);
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(context.getSource().getPlayer().getOnPos(), context.getSource().getLevel(), heavy))), false);
         return 0;
     }
@@ -214,7 +214,7 @@ public class BetterPollutionCommands {
 
     private static int removePollutionWithPos(CommandContext<CommandSourceStack> context, BlockPos blockPos, int value, boolean heavy) {
         ServerLevel level = context.getSource().getLevel();
-        BetterPollutionCommon.remPollutionAtPos(blockPos, level, value);
+        BetterPollutionCommon.remPollutionAtPos(blockPos, level, value, heavy);
         context.getSource().sendSuccess(() -> Component.literal(Arrays.toString(BetterPollutionCommon.getPollutionAtPos(blockPos, level, heavy))), false);
         return 0;
     }
